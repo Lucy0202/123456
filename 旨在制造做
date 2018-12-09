@@ -1,0 +1,63 @@
+clc
+clear
+x0=4.31;                            
+h0=0.1;                            
+x1=x0;
+x2=x0+h0;                            
+y1=3*x1^3-8*x1+9;
+y2=3*x2^3-8*x2+9;             
+
+if y1<y2
+h0=-h0;   
+x1=x2;
+x2=x0;
+end
+
+x3=x2+h0;                                            
+y3=3*x3^3-8*x3+9; 
+if y3>y2
+    bound1=min([x1,x3]);
+    bound2=max([x1,x3]);     
+else
+for i=1:500                                                            
+    x1=x2;x2=x3;x3=x2+2*i*h0;   
+                                              
+   y1=3*x1^3-8*x1+9;
+                                                      
+   y2=3*x2^3-8*x2+9;
+                                              
+   y3=3*x3^3-8*x3+9;   
+                                      
+    if y1>y2 && y2<y3     
+
+ bound1=min([x1,x3]);
+ 
+ bound2=max([x1,x3]);
+ 
+ break          
+end           
+end
+end
+a=bound1;     
+b=bound2;    
+for i=1:500          
+
+    q1=b-0.618*(b-a);          
+    q2=a+0.618*(b-a);
+y1=3*q1^3-8*q1+9;        
+y2=3*q2^3-8*q2+9;
+    if y1>=y2                            
+        a=q1;q1=q2;y1=y2;
+        q2=a+0.618*(b-a);        
+       y2=3*q2^3-8*q2+9;
+    else b=q2;
+        q2=q1;y2=y1;
+        q1=b-0.618*(b-a);
+       y1=3*q1^3-8*q1+9;       
+        if b-a<0.001           
+            
+            q=0.5*(a+b);y=3*q^3-8*q+9;   
+            break
+        end
+    end
+end
